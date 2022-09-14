@@ -1,0 +1,23 @@
+fieldset div#porigen.col-lg-4 div.input-group span.select2.select2-container.select2-container--default,
+fieldset div#pdestino.col-lg-4 div.input-group span.select2.select2-container.select2-container--default,
+fieldset div#id_contactos.col-lg-4 div.input-group span.select2.select2-container.select2-container--default,
+fieldset div#id_contactos.col-lg-4 div.input-group span.select2.select2-container.select2-container--default.select2-container--below{
+    position: absolute;
+    width: 90% !important;
+}
+
+input.input-precios {
+    height: 43px !important; 
+    border: 0px  !important; 
+    border-bottom: 1px solid #CCC !important; 
+    font-size: 30px !important; 
+    padding-left: 0px !important;
+}
+label#total{
+	color: #990909; height: 50px; border: 0px;font-size: 30px; padding-left: 0px;
+}
+div#myModal.modal.fade.in div.modal-dialog div.modal-content div.modal-body form div.form-group.col-lg-6 span.select2.select2-container.select2-container--default.select2-container--below,
+div#myModal.modal.fade.in div.modal-dialog div.modal-content div.modal-body form div.form-group.col-lg-6 span.select2.select2-container.select2-container--default.select2-container--above.select2-container--open span.selection{
+    position: absolute;
+    width: 250px !important;
+}

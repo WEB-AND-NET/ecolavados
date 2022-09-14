@@ -1,0 +1,10 @@
+/* CSS Document */
+
+hr {
+    border-bottom-width: thin;
+    border-bottom-style: dotted;
+    border-bottom-color: #CCCCCC;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+}
