@@ -15,7 +15,7 @@ setlocale(LC_MONETARY, 'es_CO');
 
 
 //For framework use. Must be defined. Use full absolute paths and end them with '/'      eg. /var/www/project/
-$config['SITE_PATH'] = realpath('..').'/app/';
+$config['SITE_PATH'] = realpath('..').'/ecolavados/';
 $config['BASE_PATH'] = realpath('.').'/dooframework/';
 
 //for production mode use 'prod'
