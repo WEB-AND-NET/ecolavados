@@ -1,0 +1,2 @@
+#Ignore database config
+protected/config/db.conf.php
