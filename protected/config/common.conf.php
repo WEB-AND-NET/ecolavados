@@ -29,7 +29,7 @@ if(strpos($config['SUBFOLDER'], '/')!==0){
 	$config['SUBFOLDER'] = '/'.$config['SUBFOLDER'];
 }
 
-$config['APP_URL'] = 'https://'.$_SERVER['HTTP_HOST'].$config['SUBFOLDER'];
+$config['APP_URL'] = 'http://'.$_SERVER['HTTP_HOST'].$config['SUBFOLDER'];
 $config['AUTOROUTE'] = TRUE;
 $config['DEBUG_ENABLED'] = TRUE;
 

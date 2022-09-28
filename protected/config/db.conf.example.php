@@ -9,5 +9,5 @@ $dbconfig['dev'] = array('192.168.5.10', 'ecolavados', 'root', 'Desarrollo2019',
 $dbconfig['prod'] = array('192.168.5.10', 'ecolavados', 'root', 'Desarrollo2019', 'mysql', false, 'collate'=>'utf8_general_ci', 'charset'=>'utf8');
 */
 
-$dbconfig['dev'] = array('localhost','ecolavados', 'ecolavado', 'c4rt4g3n4#*', 'mysql', false, 'collate'=>'utf8_general_ci', 'charset'=>'utf8');
-$dbconfig['prod'] = array('localhost', 'ecolavados', 'ecolavado', 'c4rt4g3n4#*', 'mysql', false, 'collate'=>'utf8_general_ci', 'charset'=>'utf8');
+$dbconfig['dev'] = array('host','db', 'user', 'password', 'mysql', false, 'collate'=>'utf8_general_ci', 'charset'=>'utf8');
+$dbconfig['prod'] = array('localhost', 'db', 'user', 'password', 'mysql', false, 'collate'=>'utf8_general_ci', 'charset'=>'utf8');
