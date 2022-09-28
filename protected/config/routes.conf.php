@@ -214,26 +214,37 @@ $route['*']['/entrys/csv'] = array('EntrysController', 'currentCsv');
 $route['*']['/departure'] = array('EntrysController', 'departureIndex');
 $route['*']['/departures/getAllDepartures'] = array('EntrysController', 'getAllDepartures');
 
-$route['*']['/entrys/schedule/add/:entry'] = array('EntrysController', 'addschedule');
+
 $route['*']['/entrys/edit/:pindex'] = array('EntrysController', 'edit');
 $route['*']['/entrys/gateout'] = array('EntrysController', 'gateout');
 
 
 $route['*']['/entrys/clean/validate'] = array('EntrysController', 'cleanValidate');
 $route['*']['/entrys/print/clean/:id'] = array('EntrysController', 'printClean');
-
-
 $route['*']['/entrys/print/seals/:id'] = array('EntrysController', 'printSeals');
-$route['*']['/entrys/schedule/assing/:pindex'] = array('EntrysController', 'assingschedule');
-$route['*']['/entrys/schedule/edit/:entry/:pindex'] = array('EntrysController', 'editschedule');
-$route['*']['/entrys/schedule/close/:entry/:pindex/:request'] = array('EntrysController', 'closeSchedule');
-$route['*']['/entrys/schedule/close/calidad'] = array('EntrysController', 'saveCloseSchedule');
-$route['*']['/entrys/schedule/close/renderEvidences'] = array('EntrysController', 'renderEvidences');
-$route['*']['/entrys/schedule/close/renderEvidencesQuality'] = array('EntrysController', 'renderEvidencesQuality');
-$route['*']['/entrys/schedule/close/evidence'] = array('EntrysController', 'cerrar');
 
-$route['*']['/entrys/schedule/close/seals'] = array('EntrysController', 'cerrarSeals');
-$route['*']['/entrys/getSchedule'] = array('EntrysController', 'getSchedule');
+$route['*']['/entrys/schedule/:pindex'] = array('ScheduleController', 'scheduleIndex');
+$route['*']['/entrys/schedule/add/:entry'] = array('ScheduleController', 'addSchedule');
+$route['*']['/entrys/schedule/assing/:pindex'] = array('ScheduleController', 'assingSchedule');
+$route['*']['/entrys/schedule/edit/:entry/:pindex'] = array('ScheduleController', 'editSchedule');
+$route['*']['/entrys/schedule/close/:entry/:pindex/:request'] = array('ScheduleController', 'closeScheduleIndex');
+$route['*']['/entrys/getSchedule'] = array('ScheduleController', 'getSchedule');
+$route['*']['/entrys/schedule/close/calidad'] = array('ScheduleController', 'saveCloseSchedule');
+$route['*']['/entrys/schedule/close/renderEvidences'] = array('ScheduleController', 'renderEvidences');
+$route['*']['/entrys/schedule/close/renderEvidencesQuality'] = array('ScheduleController', 'renderEvidencesQuality');
+$route['*']['/entrys/schedule/close/evidence'] = array('ScheduleController', 'closeSchedule');
+$route['*']['/entrys/schedule/close/seals'] = array('ScheduleController', 'closeSeals');
+$route['*']['/entrys/schedule/seals/image'] = array('ScheduleController', 'sealsImage');
+
+$route['*']['/entrys/schedule/seals/renderSeals'] = array('ScheduleController', 'renderSeals');
+$route['*']['/entrys/schedule/close'] = array('ScheduleController', 'saveEvidenceSchedule');
+$route['*']['/entrys/schedule/close/quality'] = array('ScheduleController', 'saveEvidenceScheduleQ');
+
+$route['*']['/entrys/schedule/print/:pindex'] = array('EntrysController', 'printEvidenceSchedule');
+$route['*']['/entrys/schedule/permisosEmpleados'] = array('EntrysController', 'permisosEmpleados');
+$route['*']['/entrys/schedule/updatePermission'] = array('EntrysController', 'updatePermission');
+
+
 $route['*']['/entrys/invoice/:type/:pindex'] = array('EntrysController', 'invoice');
 $route['*']['/entrys/invoice/all/associate/:pindex'] = array('EntrysController', 'associteInvoice');
 $route['*']['/entrys/associate/update'] = array('EntrysController', 'updateInvoice');
@@ -244,21 +255,16 @@ $route['*']['/entry/entry/limpieza'] = array('EntrysController', 'limpieza');
 $route['*']['/entrys/seals/:pindex'] = array('EntrysController', 'seals');
 $route['*']['/entrys/clean/:pindex'] = array('EntrysController', 'clean');
 $route['*']['/entrys/clean/singSave/:pindex'] = array('EntrysController', 'certificateCleanSing');
-$route['*']['/entrys/schedule/seals/image'] = array('EntrysController', 'sealsImage');
-$route['*']['/entrys/schedule/seals/renderSeals'] = array('EntrysController', 'renderSeals');
+
 $route['*']['/entry/entry/clean/save'] = array('EntrysController', 'saveClean');
 $route['*']['/entry/entry/clean/certificate/:pindex'] = array('EntrysController', 'certificateClean');
 
-$route['*']['/entrys/schedule/close'] = array('EntrysController', 'saveEvidenceSchedule');
-$route['*']['/entrys/schedule/close/quality'] = array('EntrysController', 'saveEvidenceScheduleQ');
+
 
 $route['*']['/entrys/calendar'] = array('EntrysController', 'calendar');
 $route['*']['/entrys/calendar/load'] = array('EntrysController', 'getCalendar');
 
-$route['*']['/entrys/schedule/:pindex'] = array('EntrysController', 'schedule');
-$route['*']['/entrys/schedule/print/:pindex'] = array('EntrysController', 'printEvidenceSchedule');
-$route['*']['/entrys/schedule/permisosEmpleados'] = array('EntrysController', 'permisosEmpleados');
-$route['*']['/entrys/schedule/updatePermission'] = array('EntrysController', 'updatePermission');
+
 
 $route['*']['/entrys/save'] = array('EntrysController', 'save');
 $route['*']['/entrys/save/assing'] = array('EntrysController', 'saveassing');
