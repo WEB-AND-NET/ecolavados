@@ -44,8 +44,8 @@ class MailController extends DooController {
         }
     }
     
-    public function downloadExcel(){
-        $id_cliente=1018;
+    public function downloadExcel($id_cliente){
+        
         Doo::loadClass("excel/Classes/PHPExcel");
         $objPHPExcel = new PHPExcel();       
         $propiedades=$objPHPExcel->getProperties();
