@@ -386,8 +386,8 @@ class RequestController extends DooController {
     }
     public function printer(){
         Doo::loadClass("pdf/fpdf");
-        Doo::loadClass("reportes/RequestPDF");
-        $pdf = new RequestPDF();
+        Doo::loadClass("reportes/NewRequestPDF");
+        $pdf = new NewRequestPDF();
         $id = $this->params["id"];
         $request = $this->request($id);
         $productos = $this->productos($id);
