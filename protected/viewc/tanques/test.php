@@ -27,12 +27,12 @@
                         <select class="form-control select2"  id="tanques" name="tanques">
                             <?php foreach($data["tanques"] as $tanque){ ?>
                                 <option 
-                                data-id="<?echo $tanque['id'] ?>"
-                                data-make="<?echo $tanque['make_date'] ?>" 
-                                data-test30="<?echo $tanque['test30'] ?>" 
-                                data-test60="<?echo $tanque['test60'] ?>" 
-                                value='<?echo $tanque['id'] ?>'> 
-                                <?echo $tanque['serial'] ?> </option>
+                                data-id="<?php echo $tanque['id'] ?>"
+                                data-make="<?php echo $tanque['make_date'] ?>" 
+                                data-test30="<?php echo $tanque['test30'] ?>" 
+                                data-test60="<?php echo $tanque['test60'] ?>" 
+                                value='<?php echo $tanque['id'] ?>'> 
+                                <?php echo $tanque['serial'] ?> </option>
                             <?php } ?> 
                         </select>
                     </div>

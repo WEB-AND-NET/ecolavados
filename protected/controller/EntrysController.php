@@ -30,8 +30,7 @@ class EntrysController extends DooController {
     public function index(){
         Doo::db()->query("update ats set status='V' where date(created_at) < date(now()) and status='S' OR date(created_at) < date(now()) and status='A';");
         Doo::db()->query("delete from programacion_empleados where date(created_at) < date(now()) AND fecha_inicio=''"); 
-        $this->data["entradas"] = $this->dataList();
-        
+        $this->data["entradas"] = $this->dataList();        
         $this->data['rootUrl'] = Doo::conf()->APP_URL;
         $this->data['content'] = 'entradas/list.php';
         $this->renderc('index', $this->data, true);
