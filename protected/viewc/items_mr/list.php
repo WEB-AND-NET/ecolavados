@@ -1,12 +1,12 @@
 <link href="<?= $patch ?>global/admin/plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 <section class="content-header">
     <h1>
-        List entry inspection items
+    Damage and services
 
     </h1>
     <ol class="breadcrumb">
         <li><a href="<?= $patch ?>">HOME</a></li>
-        <li class="active">LIST ENTRY INSPECTION ITEMS</li>
+        <li class="active">Damage and services</li>
     </ol>
 </section>
 <section class="content">
@@ -17,24 +17,21 @@
                     <div class="mailbox-controls" style="float:right;">
                         <!-- Check all button -->
                         <div class="btn-group">  
-                            <a href="<?= $patch; ?>items/add" id="btn-add" class=" btn btn-default btn-md"><i class="fa fa-plus-circle"></i><br/><span class='hidden-xs' >New</span></a>  
-                            <a href="<?= $patch; ?>items/edit" id="btn-edit" class="action btn btn-default btn-md"><i class="fa fa-edit"></i><br/><span class='hidden-xs' >Edit</span></a> 
-                            <a href="<?= $patch; ?>items/delete" id="btn-delete" class=" action btn btn-default btn-md"><i class="fa fa-minus-circle"></i><br/><span class='hidden-xs'>Delete</span></a>
-                            <a href="<?= $patch; ?>items/ratings" id="btn-delete" class=" btn btn-default btn-md"><i class="fa fa-list"></i><br/><span class='hidden-xs'>Ratings</span></a>
-                            <a href="<?= $patch; ?>items/mr" id="btn-delete" class=" btn btn-default btn-md"><i class="fa fa-refresh"></i><br/><span class='hidden-xs'>M&R</span></a>
-                        </div><!-- /.btn-group -->
+                            <a href="<?= $patch; ?>items/mr/add" id="btn-add" class=" btn btn-default btn-md"><i class="fa fa-plus-circle"></i><br/><span class='hidden-xs' >New</span></a>  
+                            <a href="<?= $patch; ?>items/mr/edit" id="btn-edit" class="action btn btn-default btn-md"><i class="fa fa-edit"></i><br/><span class='hidden-xs' >Edit</span></a> 
+                            <a href="<?= $patch; ?>items/mr/delete" id="btn-delete" class=" action btn btn-default btn-md"><i class="fa fa-minus-circle"></i><br/><span class='hidden-xs'>Delete</span></a>
+                            <a href="<?= $patch; ?>items/mr/damages" id="btn-damages" class=" btn btn-default btn-md"><i class="fa fa-chain-broken"></i><br/><span class='hidden-xs'>Damages</span></a>
+                            <a href="<?= $patch; ?>items/mr/services" id="btn-damages" class=" btn btn-default btn-md"><i class="fa fa fa-thumbs-up"></i><br/><span class='hidden-xs'>Services</span></a>
+                        </div>
                     </div>
                     <div class="clearfix"></div>
                     <table id="tabledatas" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>&nbsp;</th>
-                                <th>Item Name</th>
-                                <th>Principal</th>
-                                <th>It depends</th>
-                                <th>Depends</th>                          
-                                
-                                
+                                <th>Guide Line</th>
+                                <th>Code</th>
+                                <th>Damage</th>                                                    
                             </tr>
                         </thead>
                         <tbody>
@@ -42,29 +39,22 @@
                             foreach ($data["items"] as $r) {
                                 ?>
                                 <tr>
-                                    <td><input class="minimal" name="item" type="radio" value="<?= $r['id']; ?>" /></td>
-                                    <td ><?= $r['descripcion']; ?></td>
-                                    <td><?= $r['principal']; ?></td>
-                                    <td><?= $r['depende']=="0" ? 'NO' : '' ; ?></td>
-                                    <td><?= $r['depen'] ?></td>
+                                    <td><input class="minimal" name="item" type="radio" value="<?= $r->id; ?>" /></td>
+                                    <td><?= $r->guideline; ?></td>
+                                    <td><?= $r->code; ?></td>
+                                    <td><?= $r->damage; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th>&nbsp;</th>
-                                <th>Item Name</th>
-                                <th>Principal</th>
-                                <th>It depends</th>
-                                <th>Depends</th>   
+                                <th>Guide Line</th>
+                                <th>Code</th>
+                                <th>Damage</th>    
                             </tr>
                         </tfoot>
                     </table>
-
-
-
-
-
                 </div>
             </div>
         </div>

@@ -29,6 +29,26 @@ class ItemsBase extends DooModel{
     public $editable;
 
     /**
+     * @var char Max length is 1.
+     */
+    public $is_area;
+
+    /**
+     * @var char Max length is 1.
+     */
+    public $is_item_area;
+
+    /**
+     * @var int Max length is 11.
+     */
+    public $item_order;
+
+    /**
+     * @var int Max length is 11.
+     */
+    public $area_to_belong;
+
+    /**
      * @var datetime
      */
     public $create_at;
@@ -45,7 +65,7 @@ class ItemsBase extends DooModel{
 
     public $_table = 'items';
     public $_primarykey = 'id';
-    public $_fields = array('id','descripcion','principal','depende','editable','create_at','update_at','deleted');
+    public $_fields = array('id','descripcion','principal','depende','editable','is_area','is_item_area','item_order','area_to_belong','create_at','update_at','deleted');
 
     public function getVRules() {
         return array(
@@ -71,6 +91,28 @@ class ItemsBase extends DooModel{
 
                 'editable' => array(
                         array( 'maxlength', 1 ),
+                        array( 'optional' ),
+                ),
+
+                'is_area' => array(
+                        array( 'maxlength', 1 ),
+                        array( 'optional' ),
+                ),
+
+                'is_item_area' => array(
+                        array( 'maxlength', 1 ),
+                        array( 'optional' ),
+                ),
+
+                'item_order' => array(
+                        array( 'integer' ),
+                        array( 'maxlength', 11 ),
+                        array( 'optional' ),
+                ),
+
+                'area_to_belong' => array(
+                        array( 'integer' ),
+                        array( 'maxlength', 11 ),
                         array( 'optional' ),
                 ),
 

@@ -51,8 +51,10 @@
                             <i  class="fa fa-code-fork "></i>
                         </span>
                         <select class='form-control blocks' name="depende" id="depende">
-                        <option value="X"></option>
+                        <option value="X">Please select a option</option>
+                        <option <?= $a->depende=='N' ? 'selected' : '' ?> value="N">NO</option>
                         <?php foreach($data["principales"] as $principal){ ?>
+                            
                             <option <?= $a->depende==$principal["id"] ? 'selected' : '' ?> value="<?= $principal["id"] ?>"><?= $principal["descripcion"] ?></option>
                         <?php } ?>
                         </select>
@@ -82,6 +84,59 @@
                         </select>
                     </div><!-- /.input group -->
                 </div>
+
+                <div class="col-lg-4">
+                    <label id="l_tipo">Is Area*</label>
+                    <div class="input-group margin-bottom-20">
+                        <span  class="input-group-addon">
+                            <i  class="fa fa-plus"></i>
+                        </span>
+                        <select  class='form-control ' name="is_area" id="is_area">
+                            <option <?= $a->is_area == 'N' ? 'selected' :''; ?> value='N'>NO</option>
+                            <option <?= $a->is_area == 'S' ? 'selected' :''; ?> value='S'>YES</option>
+                        </select>
+                    </div><!-- /.input group -->
+                </div>
+
+                <div class="col-lg-4">
+                    <label id="l_tipo">Is Item Area*</label>
+                    <div class="input-group margin-bottom-20">
+                        <span  class="input-group-addon">
+                            <i  class="fa fa-plus"></i>
+                        </span>
+                        <select  class='form-control ' name="is_item_area" id="is_item_area">
+                            <option <?= $a->is_item_area == 'N' ? 'selected' :''; ?> value='N'>NO</option>
+                            <option <?= $a->is_item_area == 'S' ? 'selected' :''; ?> value='S'>YES</option>
+                        </select>
+                    </div><!-- /.input group -->
+                </div>
+
+                <div class="col-lg-4">
+                    <label id="l_order">Order*</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-text-width"></i>       
+                        </div>
+                        <input type="number" class="form-control pull-right" value="<?= $a->item_order; ?>" id="item_order" name="item_order">
+                    </div><!-- /.input group -->
+                </div>
+
+                <div class="col-lg-4">
+                    <label id="l_area_to_belong">Areas*</label>
+                    <div class="input-group margin-bottom-20" >
+                        <span class="input-group-addon">
+                            <i  class="fa fa-code-fork "></i>
+                        </span>
+                        <select class='form-control' name="area_to_belong" id="area_to_belong">
+                        <option value="">Please select a option</option>                        
+                        <?php foreach($data["areas"] as $area){ ?>                            
+                            <option <?= $a->area_to_belong==$area["id"] ? 'selected' : '' ?> value="<?= $area["id"] ?>"><?= $area["descripcion"] ?></option>
+                        <?php } ?>
+                        </select>
+                    </div><!-- /.input group -->
+                </div>
+
+    
                 <div class="clearfix"></div><br>
 
                 <div class="box-footer col-md-4 pull-right">
@@ -156,8 +211,7 @@
     $(document).ready(function(){
         veryfi();
         if($("#id").val()){
-            $.post("<?= $data["rootUrl"] ?>items/getItemsCalificaciones",{id:$("#id").val()},function(data){
-                console.log(data);
+            $.post("<?= $data["rootUrl"] ?>items/getItemsCalificaciones",{id:$("#id").val()},function(data){                
                 data.forEach(function(item){
                     var option = new Option(item.descripcion,item.id, true, true);
                     $("#tipo").append(option).trigger('change');
@@ -170,11 +224,26 @@
         veryfi();
     })
 
-    function veryfi(){
-         if($("#principal").val()=="S"){
-            $(".blocks").attr("disabled", "disabled");
+    $("#depende").change(function(){
+        if($(this).val()=="N"){
+            $(".blocks,#editable").attr("disabled", "disabled");
         }else{
-            $(".blocks").removeAttr("disabled");
+            $(".blocks,#editable").removeAttr("disabled");
+        }
+    })
+
+    $("#is_area").change(function(){
+        if($(this).val()=="S"){
+            $("#is_item_area").attr("disabled", "disabled");
+        }else{
+            $("#is_item_area").removeAttr("disabled");
+        }
+    })
+    function veryfi(){
+        if($("#principal").val()=="S"){
+            $(".blocks,#editable,#is_area,#is_item_area,#item_order").attr("disabled", "disabled");
+        }else{
+            $(".blocks,#editable,#is_area,#is_item_area,#item_order").removeAttr("disabled");
         }
     }
 
@@ -213,15 +282,16 @@
 
     $("#btn-save").click(function(){
         if(validateForm()){
-            if($("#principal option:selected").val()=="S" && $("editable option:selected").val()=="S"){
-                alert("The principal  no is editable");
+            if($("#principal option:selected").val()=="S" && $("#editable option:selected").val()=="S"){
+                alert("The principal no is editable");
+            }else if($("#is_area option:selected").val()=="S" && $("#order").val()==""){
+                alert("Order for area is required!");
             }else{
                 $("#form1").submit();
             }
         }
     })
-    $('#tipo').select2({
-        
+    $('#tipo').select2({        
         ajax:{
             url:'<?php echo $data["rootUrl"] ?>items/getTipo',
             dataType: 'json',

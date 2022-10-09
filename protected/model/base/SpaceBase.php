@@ -29,12 +29,12 @@ class SpaceBase extends DooModel{
     public $id_empleado_autorizado;
 
     /**
-     * @var text
+     * @var longtext
      */
     public $firma_empleado_autoriza;
 
     /**
-     * @var text
+     * @var longtext
      */
     public $firma_empleado_autorizado;
 

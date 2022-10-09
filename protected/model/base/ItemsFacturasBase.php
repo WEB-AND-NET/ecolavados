@@ -67,7 +67,10 @@ class ItemsFacturasBase extends DooModel{
      * @var varchar Max length is 45.
      */
     public $closed;
-    
+
+    /**
+     * @var int Max length is 11.
+     */
     public $id_item_request;
 
     public $_table = 'items_facturas';
@@ -140,6 +143,12 @@ class ItemsFacturasBase extends DooModel{
                 'closed' => array(
                         array( 'maxlength', 45 ),
                         array( 'optional' ),
+                ),
+
+                'id_item_request' => array(
+                        array( 'integer' ),
+                        array( 'maxlength', 11 ),
+                        array( 'notnull' ),
                 )
             );
     }
