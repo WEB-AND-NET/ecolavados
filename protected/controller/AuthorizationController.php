@@ -632,8 +632,7 @@ class AuthorizationController extends DooController {
         $mail->SetFrom('operaciones@ecolavados.com.co', "$entrada[serial] EIR");
         $mail->AddReplyTo("operaciones@ecolavados.com.co","Operaciones ecolavados");
         
-        var_dump($mail);
-        exit;
+       
         $ent=$entrada["id_cliente"];
         $mensaje="";
         $emails=Doo::db()->query("SELECT email FROM action_email_clients WHERE id_client='$ent' AND id_action_email='1'")->fetch();
