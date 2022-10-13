@@ -58,9 +58,34 @@ class ParametrosBase extends DooModel{
      */
     public $valor_residuos;
 
+    /**
+     * @var varchar Max length is 40.
+     */
+    public $host;
+
+    /**
+     * @var int Max length is 11.
+     */
+    public $port;
+
+    /**
+     * @var varchar Max length is 5.
+     */
+    public $smtpsecure;
+
+    /**
+     * @var varchar Max length is 40.
+     */
+    public $username;
+
+    /**
+     * @var varchar Max length is 40.
+     */
+    public $password;
+
     public $_table = 'parametros';
     public $_primarykey = 'id';
-    public $_fields = array('id','territorial','resolucion_hab','ano_hab','ano_actual','cons_cliente','cons_planilla','cons_ruta','cons_factura','iva','valor_residuos');
+    public $_fields = array('id','territorial','resolucion_hab','ano_hab','ano_actual','cons_cliente','cons_planilla','cons_ruta','cons_factura','iva','valor_residuos','host','port','smtpsecure','username','password');
 
     public function getVRules() {
         return array(
@@ -123,6 +148,32 @@ class ParametrosBase extends DooModel{
 
                 'valor_residuos' => array(
                         array( 'float' ),
+                        array( 'optional' ),
+                ),
+
+                'host' => array(
+                        array( 'maxlength', 40 ),
+                        array( 'optional' ),
+                ),
+
+                'port' => array(
+                        array( 'integer' ),
+                        array( 'maxlength', 11 ),
+                        array( 'optional' ),
+                ),
+
+                'smtpsecure' => array(
+                        array( 'maxlength', 5 ),
+                        array( 'optional' ),
+                ),
+
+                'username' => array(
+                        array( 'maxlength', 40 ),
+                        array( 'optional' ),
+                ),
+
+                'password' => array(
+                        array( 'maxlength', 40 ),
                         array( 'optional' ),
                 )
             );
