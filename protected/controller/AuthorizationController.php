@@ -616,19 +616,24 @@ class AuthorizationController extends DooController {
     public function sendEmailIER($id,$entrada){
         
         Doo::loadClass("mail/PHPMailer");
+        Doo::loadModel("Parametros");
+        $param = new Parametros();
+        $param=Doo::db()->Find($param,array('limit'=>1));
+        
         $mail = new PHPMailer();
         $mail->isSMTP(); 
         $mail->SMTPAuth = true;
-        $mail->Host = 'mail4.correopremium.com';
-        $mail->Port = 587;
-        $mail->SMTPSecure = "tls";
-        $mail->Username = "operaciones@ecolavados.com.co";
-        $mail->Password = "Martin2011*";
+        $mail->Host = $param->host;
+        $mail->Port = $param->port;
+        $mail->SMTPSecure = $param->smtpsecure;
+        $mail->Username = $param->username;
+        $mail->Password = $param->password;
         
         $mail->SetFrom('operaciones@ecolavados.com.co', "$entrada[serial] EIR");
         $mail->AddReplyTo("operaciones@ecolavados.com.co","Operaciones ecolavados");
         
-        
+        var_dump($mail);
+        exit;
         $ent=$entrada["id_cliente"];
         $mensaje="";
         $emails=Doo::db()->query("SELECT email FROM action_email_clients WHERE id_client='$ent' AND id_action_email='1'")->fetch();
@@ -648,7 +653,6 @@ class AuthorizationController extends DooController {
             $mensaje="<a href='https://ecolavados.com.co/app/entrys/timeline/$id'>This tank container has a damage please verify the EIR and the images in ECOLAVADOS web platform</a>";
         }
         $emails = explode(",", $emails["email"]);
-        $mail->AddAddress("mmf19972010@hotmail.com");
         foreach($emails as $emal){
             $mail->AddAddress($emal);
         }

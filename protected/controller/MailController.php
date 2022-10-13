@@ -15,14 +15,18 @@ class MailController extends DooController {
     
     public function sendmail(){
         Doo::loadClass("mail/PHPMailer");
+        Doo::loadModel("Parametros");
+        $param = new Parametros();
+        $param=Doo::db()->Find($param,array('limit'=>1));
+        
         $mail = new PHPMailer();
         $mail->isSMTP(); 
         $mail->SMTPAuth = true;
-        $mail->Host = 'mail4.correopremium.com';
-        $mail->Port = 587;
-        $mail->SMTPSecure = "tls";
-        $mail->Username = "operaciones@ecolavados.com.co";
-        $mail->Password = "Martin2011*";
+        $mail->Host = $param->host;
+        $mail->Port = $param->port;
+        $mail->SMTPSecure = $param->smtpsecure;
+        $mail->Username = $param->username;
+        $mail->Password = $param->password;
         
 
         $mail->SetFrom('operaciones@ecolavados.com.co', 'Operaciones ecolavados');
@@ -161,9 +165,9 @@ class MailController extends DooController {
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $hoy = date("Y-m-d");  
         $documentName="CURRENT INVENTORY_$hoy.xlsx";
-        //$objWriter->save(str_replace(__FILE__,"docs/$documentName",__FILE__));//Para guardar en el servidor 
-        $objWriter->save('php://output');//Para guardar en el servidor 
-        //return $documentName;
+        $objWriter->save(str_replace(__FILE__,"docs/$documentName",__FILE__));//Para guardar en el servidor 
+        //$objWriter->save('php://output');//Para guardar en el servidor 
+        return $documentName;
 
    
     }
