@@ -180,7 +180,7 @@ class MailController extends DooController {
         FROM  entrada e $sqlJoin WHERE ai.clientes_id = '$id_cliente' AND e.estado = 'A' GROUP BY e.id)
         UNION
         (SELECT t.serial, s.status_name, e.fecha, sd.fecha_salida, 'customer Ref' AS customerRef, p.nombre AS last_cargo, 'Capacity' AS Capacity, 'Tare' AS Tare, 'Exporter' AS Exporter, 'Forecast Out' AS ForecastOut, proc.fecha_inicio AS fechaClean, pror.fecha_inicio AS fechaRepair, test30, test60, 'Next Test' AS NextTest, ai.create_at AS autorizacionDate, ai.fecha_estimada, 'Available Date' AS AvailableDate, ai.observation, e.id
-        FROM  salida sd INNER JOIN entrada e ON e.id = sd.id_entrada $sqlJoin WHERE ai.clientes_id = '1018' AND e.fecha >= DATE_ADD(NOW(), INTERVAL -7 DAY) GROUP BY e.id) 
+        FROM  salida sd INNER JOIN entrada e ON e.id = sd.id_entrada $sqlJoin WHERE ai.clientes_id = '$id_cliente' AND e.fecha >= DATE_ADD(NOW(), INTERVAL -7 DAY) GROUP BY e.id) 
         ORDER BY fecha";
         $entrys= Doo::db()->query($sql)->fetchAll();
         //$i=0;
