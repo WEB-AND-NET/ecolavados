@@ -21,13 +21,18 @@ class ItemsMrController extends DooController {
             }
         }
     }
-
+    public function getGuideLineDamage(){
+        return  Doo::db()->query("SELECT gui.id,da.id as id_damage,guideline,code,da.damage FROM mr_guideline gui 
+        INNER JOIN mr_damages da on (gui.damage=da.id) where gui.deleted=1 and da.deleted=1;")->fetchAll();
+    }
     public function index(){
         $this->data['rootUrl'] = Doo::conf()->APP_URL;        
-        $this->data['items'] = Doo::db()->find("MrGuideline",array("where"=>"deleted=1"));
+        $this->data['items'] = $this->getGuideLineDamage();
         $this->data['content'] = 'items_mr/list.php';
         $this->renderc('index', $this->data, true);
     }
+
+
 
     public function add() {
         Doo::loadModel("MrGuideline");
@@ -85,7 +90,7 @@ class ItemsMrController extends DooController {
     public function getGuidelineItems(){
         if(isset($_POST["id"])){
             $id = $_POST["id"];
-            $item = Doo::db()->query("SELECT id,code from mr_items where id in(select items from mr_guideline_items where guideline='$id' and deleted='1' ) and deleted='1'")->fetchAll();
+            $item = Doo::db()->query("SELECT id,mr from mr_items where id in(select items from mr_guideline_items where guideline='$id' and deleted='1' ) and deleted='1'")->fetchAll();
             echo json_encode($item);
         }
     }
@@ -149,7 +154,7 @@ class ItemsMrController extends DooController {
     public function getService (){
         if(isset($_REQUEST["search"])){
             $param=$_REQUEST["search"];
-            $json["item"] = Doo::db()->query("SELECT id,code  FROM mr_items WHERE code  LIKE '%$param%'  ")->fetchAll();
+            $json["item"] = Doo::db()->query("SELECT id,mr  FROM mr_items WHERE code  LIKE '%$param%'  ")->fetchAll();
             echo json_encode($json);
         }
     }

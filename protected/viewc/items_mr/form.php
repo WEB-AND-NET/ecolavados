@@ -85,7 +85,7 @@
         if($("#id").val()){
             $.post("<?= $data["rootUrl"] ?>items/mr/getGuidelineItems",{id:$("#id").val()},function(data){                
                 data.forEach(function(item){
-                    var option = new Option(item.code,item.id, true, true);
+                    var option = new Option(item.mr,item.id, true, true);
                     $("#services").append(option).trigger('change');
                 })
             },'Json')
@@ -108,7 +108,7 @@
                         results: $.map(data.item,function(item){
 
                             return{
-                                text:item.code,
+                                text:item.mr,
                                 id:item.id,
                             }
                         })

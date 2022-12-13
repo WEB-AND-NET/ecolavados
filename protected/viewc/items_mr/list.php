@@ -39,10 +39,10 @@
                             foreach ($data["items"] as $r) {
                                 ?>
                                 <tr>
-                                    <td><input class="minimal" name="item" type="radio" value="<?= $r->id; ?>" /></td>
-                                    <td><?= $r->guideline; ?></td>
-                                    <td><?= $r->code; ?></td>
-                                    <td><?= $r->damage; ?></td>
+                                    <td><input class="minimal" name="item" type="radio" value="<?= $r["id"]; ?>" /></td>
+                                    <td><?= $r["guideline"]; ?></td>
+                                    <td><?= $r["code"]; ?></td>
+                                    <td><?= $r["damage"]; ?></td>
                                 </tr>
                             <?php } ?>
                         </tbody>

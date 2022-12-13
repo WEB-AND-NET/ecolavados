@@ -154,7 +154,31 @@ class ItemsController extends DooController {
         return Doo::conf()->APP_URL . 'items'; 
     }
 
-
+    public function getAreasAndItems(){
+        $list = array();
+        $areas = Doo::db()->query("SELECT * FROM items 
+        WHERE principal = 'N'
+        AND depende='N' 
+        AND editable = 'N' 
+        AND is_item_area = 'N' 
+        AND is_area = 'S' 
+        AND deleted='1' order by item_order;")->fetchAll();
+        foreach($areas as $key => $area){
+            $items = Doo::db()->query("SELECT * FROM items 
+            WHERE principal = 'N'
+            AND depende='N' 
+            AND editable = 'N' 
+            AND is_item_area = 'S' 
+            AND is_area = 'N' 
+            AND deleted='1' 
+            AND area_to_belong = '$area[id]'order by item_order;")->fetchAll();       
+            
+                $area["items"] = $items;
+                $list[]=$area;
+            
+        }
+        return $list;
+    }
 }
 
 ?>

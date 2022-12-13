@@ -304,6 +304,9 @@ $route['*']['/request/insert'] = array('RequestController', 'insert');
 $route['*']['/request/not/:url/:id'] = array('RequestController', 'not');
 $route['*']['/mrequest/approve/:url/:id'] = array('RequestController', 'approve');
 $route['*']['/request/delete'] = array('RequestController', 'deleteItem');
+$route['*']['/request/getItemsArea'] = array('RequestController', 'getItemsArea');
+$route['*']['/request/authorize/:id'] = array('RequestController', 'authorize');
+
 /**Request Client*/
 
 $route['*']['/mrequest/approve/:id'] = array('RequestController', 'approve');

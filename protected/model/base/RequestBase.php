@@ -48,9 +48,14 @@ class RequestBase extends DooModel{
      */
     public $img;
 
+    /**
+     * @var decimal Max length is 11. ,2).
+     */
+    public $labour_rate;
+
     public $_table = 'request';
     public $_primarykey = 'id';
-    public $_fields = array('id','descripcion','cliente_id','id_entrada','state','deleted','updated_at','created_at','img');
+    public $_fields = array('id','descripcion','cliente_id','id_entrada','state','deleted','updated_at','created_at','img','labour_rate');
 
     public function getVRules() {
         return array(
@@ -98,6 +103,11 @@ class RequestBase extends DooModel{
 
                 'img' => array(
                         array( 'maxlength', 100 ),
+                        array( 'optional' ),
+                ),
+
+                'labour_rate' => array(
+                        array( 'float' ),
                         array( 'optional' ),
                 )
             );

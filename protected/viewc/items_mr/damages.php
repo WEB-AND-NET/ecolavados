@@ -16,7 +16,7 @@
             <fieldset style="width:97%;">
                 <legend>General information</legend>                       
           
-                <div class="col-lg-10">
+                <div class="col-lg-5">
                     <label id="l_damage">Guide Line*</label>
                     <div class="input-group">
                         <div class="input-group-addon">
@@ -26,6 +26,15 @@
                     </div><!-- /.input group -->
                 </div>
 
+                <div class="col-lg-5">
+                    <label id="l_request_code">Request Code*</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-text-width"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right" value="" id="request_code" name="request_code">
+                    </div><!-- /.input group -->
+                </div>
                 <div class="col-lg-12">
                     <button type="button" id="btn-save" class="btn  bg-green pull-right">
                         <i class="fa fa-save "></i> Save
@@ -36,7 +45,8 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>damage</th>                            
+                            <th>damage</th>        
+                            <th>Request Code</th>                     
                             <th>&</th>
                         </tr>
                     </thead>
@@ -68,6 +78,7 @@
         columns:[ 
             { data: "id"} ,
             { data: "damage"} ,
+            { data: "request_code"} ,
             {
                 "data": null,
                 "defaultContent": `
@@ -94,10 +105,12 @@
         if(validateForm()){
             $.post("<?= $patch ?>items/mr/saveDamages",{
                 damage:$("#damage").val(),
+                request_code:$("#request_code").val(),
                 deleted:1,             
             },function(data){
                 table.ajax.reload();
                 $("#damage").val("")
+                $("#request_code").val("")
             })
         }
     })

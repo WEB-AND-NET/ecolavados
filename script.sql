@@ -51,6 +51,7 @@ CREATE TABLE `mr_guideline_items` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-
+ALTER TABLE `items` 
+CHANGE COLUMN `depende` `depende` VARCHAR(45) NULL DEFAULT 'N' ;
 
 --Prod
