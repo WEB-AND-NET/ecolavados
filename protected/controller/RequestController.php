@@ -582,14 +582,18 @@ class RequestController extends DooController {
 
     public function sendEmailRequest($email,$body){
         Doo::loadClass("mail/PHPMailer");
+        Doo::loadModel("Parametros");
+        $param = new Parametros();
+        $param=Doo::db()->Find($param,array('limit'=>1));
+        
         $mail = new PHPMailer();
         $mail->isSMTP(); 
         $mail->SMTPAuth = true;
-        $mail->Host = 'mail4.correopremium.com';
-        $mail->Port = 587;
-        $mail->SMTPSecure = "tls";
-        $mail->Username = "operaciones@ecolavados.com.co";
-        $mail->Password = "Martin2011*";
+        $mail->Host = $param->host;
+        $mail->Port = $param->port;
+        $mail->SMTPSecure = $param->smtpsecure;
+        $mail->Username = $param->username;
+        $mail->Password = $param->password;
         
         $mail->SetFrom('operaciones@ecolavados.com.co', 'Operaciones ecolavados-Request');
         $mail->AddReplyTo("operaciones@ecolavados.com.co","Operaciones ecolavados");

@@ -15,14 +15,18 @@ class MailController extends DooController {
     
     public function sendmail(){
         Doo::loadClass("mail/PHPMailer");
+        Doo::loadModel("Parametros");
+        $param = new Parametros();
+        $param=Doo::db()->Find($param,array('limit'=>1));
+        
         $mail = new PHPMailer();
         $mail->isSMTP(); 
         $mail->SMTPAuth = true;
-        $mail->Host = 'mail4.correopremium.com';
-        $mail->Port = 587;
-        $mail->SMTPSecure = "tls";
-        $mail->Username = "operaciones@ecolavados.com.co";
-        $mail->Password = "Martin2011*";
+        $mail->Host = $param->host;
+        $mail->Port = $param->port;
+        $mail->SMTPSecure = $param->smtpsecure;
+        $mail->Username = $param->username;
+        $mail->Password = $param->password;
         
 
         $mail->SetFrom('operaciones@ecolavados.com.co', 'Operaciones ecolavados');
@@ -47,7 +51,8 @@ class MailController extends DooController {
     public function downloadExcel($id_cliente){
         
         Doo::loadClass("excel/Classes/PHPExcel");
-        $objPHPExcel = new PHPExcel();       
+        $objPHPExcel = new PHPExcel();     
+        $objPHPExcel->getActiveSheet()->setShowGridlines(false);  
         $propiedades=$objPHPExcel->getProperties();
         $propiedades->setCreator("Cattivo");
         $propiedades->setLastModifiedBy("Cattivo");
@@ -59,16 +64,94 @@ class MailController extends DooController {
          // Agregar Informacion
         $page_body=$objPHPExcel->setActiveSheetIndex(0);
 
+        //combinar celdas
+        $page_body->mergeCells('A1:B6');
+        $page_body->mergeCells('C2:F5');
+
+        //Insertar logo a excel
+        $objDrawing = new PHPExcel_Worksheet_Drawing();
+        $objDrawing->setName('logo');
+        $objDrawing->setDescription('logo');
+        $objDrawing->setPath('global/img/logo.png');
+        $objDrawing->setCoordinates('A1');
+        //setOffsetX works properly
+        $objDrawing->setOffsetX(5); 
+        $objDrawing->setOffsetY(5);                
+        //set width, height
+        $objDrawing->setWidth(300); 
+        $objDrawing->setHeight(100); 
+        $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());  
+
+        //Alineacion centrada y negrilla para celda de titulo y fecha
+        $style = array(
+            'alignment' => array(
+                'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+
+            ),
+            'font'  => array(
+                'bold'  => true
+            )
+        );
+        $page_body->getStyle('C2')->applyFromArray($style);
+        $page_body->getStyle('C2')->getAlignment()->setWrapText(true);
+
+        $today = date('d-m-Y');
+        $last = date("d-m-Y",strtotime($today."- 7 days")); 
+
+        $page_body->setCellValue('C2',"Daily Report\n".$last." - ". $today . "\nCartagena, Colombia");
         
-        $fila=1;
-        $page_body->setCellValue('A'.$fila,"#");
+        
+        //Color de relleno y negrilla para cabezeras
+        $styleArray = array(
+            'fill' => array(
+                'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                'color' => array('rgb' => '70ad47')
+            ),
+            'font'  => array(
+                'bold'  => true,
+                'color' => array('rgb' => 'FFFFFF')
+            )
+        );
+        $page_body->getStyle('A7:S7')->applyFromArray($styleArray);
+
+        //Bordes desde titulos hasta la fila 100
+        $page_body->getStyle('A7:S100')->getBorders()->applyFromArray(
+            array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN,
+                    'color' => array(
+                        'rgb' => '000000'
+                    )
+                    ),
+            )
+        );       
+        
+        $fila=7;
+        $page_body->setCellValue('A'.$fila,"Tank Container");
        
-        $page_body->setCellValue('B'.$fila,"Tank Number");
+        $page_body->setCellValue('B'.$fila,"Status");
         $page_body->setCellValue('C'.$fila,"Date In");
-        $page_body->setCellValue('D'.$fila,"Status");
-        $page_body->setCellValue('E'.$fila,"Clean On");
+        $page_body->setCellValue('D'.$fila,"Date Out");
+        $page_body->setCellValue('E'.$fila,"Customer Ref.");
+        $page_body->setCellValue('F'.$fila,"Last Cargo");
+        $page_body->setCellValue('G'.$fila,"Capacity");
+        $page_body->setCellValue('H'.$fila,"Tare");
+        $page_body->setCellValue('I'.$fila,"Exporter");
+        $page_body->setCellValue('J'.$fila,"Forecast Out");
+        $page_body->setCellValue('K'.$fila,"Clean Date");
+        $page_body->setCellValue('L'.$fila,"Repair Date");
+        $page_body->setCellValue('M'.$fila,"Test 2,5 Year");
+        $page_body->setCellValue('N'.$fila,"Test 5 Year");
+        $page_body->setCellValue('O'.$fila,"Next Test");
+        $page_body->setCellValue('P'.$fila,"Authorised Date");
+        $page_body->setCellValue('Q'.$fila,"Estimated Date");
+        $page_body->setCellValue('R'.$fila,"Available Date");
+        $page_body->setCellValue('S'.$fila,"Additional Info");
+
+        $objPHPExcel->getActiveSheet()->setAutoFilter('B7:S7');
     
-        $sqlJoin = "INNER  JOIN status s ON (s.id=e.status)
+        /*$sqlJoin = "INNER  JOIN status s ON (s.id=e.status)
         INNER JOIN autorizacion_ingreso ai on(ai.id=e.autorizacion_ingreso_id)
     	INNER JOIN tanques  t on (t.id=ai.tanques_id)
         INNER JOIN clientes  c on (c.id=ai.clientes_id)
@@ -83,17 +166,46 @@ class MailController extends DooController {
         $sql="SELECT date(proe.fecha_inicio) as fecha_inicio, ai.assing, ai.observation , concat(ai.placa_salida,'-',ai.nombre_conductor_salida) as salida,fecha_salida, ai.id as id_autorizacion,ai.type,ai.color_client_send,ai.numer_client_sed,ai.name_client_send,s.color,e.fecha ,t.serial,c.nombre,e.id,s.status_name ,
         group_concat(concat(it.descripcion,'-',ie.valor)) as damage ,   test30,test60,p.nombre as last_cargo
         FROM entrada e ". $sqlJoin ." where
-    	c.id='$id_cliente' AND  e.estado='A' group by e.id order by e.fecha;";
+    	c.id='$id_cliente' AND  e.estado='A' group by e.id order by e.fecha;";*/
+
+        $sqlJoin= "INNER JOIN eco.status s ON (s.id = e.status) 
+        INNER JOIN autorizacion_ingreso ai ON (ai.id = e.autorizacion_ingreso_id) 
+        INNER JOIN tanques t ON (t.id = ai.tanques_id) 
+        LEFT JOIN programacion proc ON (proc.id_entrada = e.id AND proc.proceso = 3) 
+        LEFT JOIN programacion pror ON (pror.id_entrada = e.id AND pror.proceso = 6)
+        INNER JOIN clientes_productos cp ON (cp.productos_id=e.last_cargo AND ai.clientes_id=cp.clientes_id AND cp.deleted='1')
+        INNER JOIN productos p ON p.id=cp.productos_id";
+
+        $sql = "(SELECT t.serial, s.status_name, e.fecha, ai.fecha_salida, 'customer Ref' AS customerRef, p.nombre AS last_cargo, 'Capacity' AS Capacity, 'Tare' AS Tare, 'Exporter' AS Exporter, 'Forecast Out' AS ForecastOut, proc.fecha_inicio AS fechaClean, pror.fecha_inicio AS fechaRepair, test30, test60, 'Next Test' AS NextTest, ai.create_at AS autorizacionDate, ai.fecha_estimada, 'Available Date' AS AvailableDate, ai.observation, e.id
+        FROM  entrada e $sqlJoin WHERE ai.clientes_id = '$id_cliente' AND e.estado = 'A' GROUP BY e.id)
+        UNION
+        (SELECT t.serial, s.status_name, e.fecha, sd.fecha_salida, 'customer Ref' AS customerRef, p.nombre AS last_cargo, 'Capacity' AS Capacity, 'Tare' AS Tare, 'Exporter' AS Exporter, 'Forecast Out' AS ForecastOut, proc.fecha_inicio AS fechaClean, pror.fecha_inicio AS fechaRepair, test30, test60, 'Next Test' AS NextTest, ai.create_at AS autorizacionDate, ai.fecha_estimada, 'Available Date' AS AvailableDate, ai.observation, e.id
+        FROM  salida sd INNER JOIN entrada e ON e.id = sd.id_entrada $sqlJoin WHERE ai.clientes_id = '$id_cliente' AND e.fecha >= DATE_ADD(NOW(), INTERVAL -7 DAY) GROUP BY e.id) 
+        ORDER BY fecha";
         $entrys= Doo::db()->query($sql)->fetchAll();
-        $i=0;
+        //$i=0;
         foreach($entrys as $e){
-            $i++;
+            //$i++;
             $fila++;
-            $page_body->setCellValue('A' . $fila, $i);
-            $page_body->setCellValue('B' . $fila, $e['serial']);
+            $page_body->setCellValue('A' . $fila, $e['serial']);
+            $page_body->setCellValue('B' . $fila, $e['status_name']);
             $page_body->setCellValue('C' . $fila, $e['fecha']);
-            $page_body->setCellValue('D' . $fila, $e['status_name']);
-            $page_body->setCellValue('E' . $fila, $e['fecha_inicio']);
+            $page_body->setCellValue('D' . $fila, $e['fecha_salida']);
+            $page_body->setCellValue('E' . $fila, $e['customerRef']);
+            $page_body->setCellValue('F' . $fila, $e['last_cargo']);
+            $page_body->setCellValue('G' . $fila, $e['Capacity']);
+            $page_body->setCellValue('H' . $fila, $e['Tare']);
+            $page_body->setCellValue('I' . $fila, $e['Exporter']);
+            $page_body->setCellValue('J' . $fila, $e['ForecastOut']);
+            $page_body->setCellValue('K' . $fila, $e['fechaClean']);
+            $page_body->setCellValue('L' . $fila, $e['fechaRepair']);
+            $page_body->setCellValue('M' . $fila, $e['test30']);
+            $page_body->setCellValue('N' . $fila, $e['test60']);
+            $page_body->setCellValue('O' . $fila, $e['NextTest']);
+            $page_body->setCellValue('P' . $fila, $e['autorizacionDate']);
+            $page_body->setCellValue('Q' . $fila, $e['fecha_estimada']);
+            $page_body->setCellValue('R' . $fila, $e['AvailableDate']);
+            $page_body->setCellValue('S' . $fila, $e['observation']);
 
         
         }
@@ -101,12 +213,12 @@ class MailController extends DooController {
         $objPHPExcel->getActiveSheet()->setTitle('Estado Entradas');
 
         //Ajustar ancho de las columna
-        foreach(range('A','E') as $columnID) {
+        foreach(range('A','S') as $columnID) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
                 ->setAutoSize(true);
         }
 
-        // Crea nueva hoja dentro del documento excel
+        /*// Crea nueva hoja dentro del documento excel
         $page_body=$objPHPExcel->createSheet(1);
 
         // Agregar Informacion
@@ -150,7 +262,7 @@ class MailController extends DooController {
         foreach(range('A','F') as $columnID) {
             $objPHPExcel->getActiveSheet()->getColumnDimension($columnID)
                 ->setAutoSize(true);
-        }
+        }*/
 
         //Establecer la hoja activa, para que cuando se abra el documento se muestre primero.
         $objPHPExcel->setActiveSheetIndex(0);
@@ -161,9 +273,9 @@ class MailController extends DooController {
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $hoy = date("Y-m-d");  
         $documentName="CURRENT INVENTORY_$hoy.xlsx";
-        //$objWriter->save(str_replace(__FILE__,"docs/$documentName",__FILE__));//Para guardar en el servidor 
-        $objWriter->save('php://output');//Para guardar en el servidor 
-        //return $documentName;
+        $objWriter->save(str_replace(__FILE__,"docs/$documentName",__FILE__));//Para guardar en el servidor 
+        //$objWriter->save('php://output');//Para guardar fuera del servidor 
+        return $documentName;
 
    
     }

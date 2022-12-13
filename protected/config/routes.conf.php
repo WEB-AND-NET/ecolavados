@@ -528,3 +528,8 @@ $route['*']['/indicadores/renderIndicadoresEmpleados'] = array('IndicatorsContro
 $route['*']['/request/change/:pindex'] = array('RequestController', 'changeRequest');
 $route['*']['/spaces/getAllSpace'] = array('SpaceController', 'getAllSpace');
 $route['*']['/spaces/delete'] = array('SpaceController', 'desactivate');
+
+
+/**Parametros */
+$route['*']['/parametros'] = array('ParametrosController', 'index');
+$route['*']['/parametros/save'] = array('ParametrosController', 'save');
