@@ -508,3 +508,11 @@ $route['*']['/spaces/delete'] = array('SpaceController', 'desactivate');
 /**Parametros */
 $route['*']['/parametros'] = array('ParametrosController', 'index');
 $route['*']['/parametros/save'] = array('ParametrosController', 'save');
+
+/**Ciudades */
+$route['*']['/ciudades'] = array('ciudadesController', 'index');
+$route['*']['/ciudades/add'] = array('ciudadesController', 'add');
+/**$route['*']['/usuarios/edit/:pindex'] = array('UsuariosController', 'edit');
+$route['*']['/usuarios/delete/:pindex'] = array('UsuariosController', 'deactivate');*/
+$route['*']['/ciudades/save'] = array('ciudadesController', 'save');
+/**$route['*']['/usuarios/validar'] = array('UsuariosController', 'validar'); */
