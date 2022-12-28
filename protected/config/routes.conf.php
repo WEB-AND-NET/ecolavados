@@ -512,7 +512,7 @@ $route['*']['/parametros/save'] = array('ParametrosController', 'save');
 /**Ciudades */
 $route['*']['/ciudades'] = array('ciudadesController', 'index');
 $route['*']['/ciudades/add'] = array('ciudadesController', 'add');
-/**$route['*']['/usuarios/edit/:pindex'] = array('UsuariosController', 'edit');
-$route['*']['/usuarios/delete/:pindex'] = array('UsuariosController', 'deactivate');*/
+$route['*']['/ciudades/edit/:pindex'] = array('ciudadesController', 'edit');
+$route['*']['/ciudades/delete/:pindex'] = array('ciudadesController', 'deactivate');
 $route['*']['/ciudades/save'] = array('ciudadesController', 'save');
 /**$route['*']['/usuarios/validar'] = array('UsuariosController', 'validar'); */

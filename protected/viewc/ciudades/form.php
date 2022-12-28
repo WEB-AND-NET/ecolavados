@@ -6,7 +6,7 @@
     </h1>
     <ol class="breadcrumb">
         <li><a href="<?= $patch ?>">Home</a></li>
-        <li><a href="<?= $patch ?>clientes">City</a></li>
+        <li><a href="<?= $patch ?>ciudades">City</a></li>
         <li class="active"> <?= ($a->id == "" ? 'City Register' : 'City update'); ?> </li>
     </ol>
 </section>

@@ -31,7 +31,6 @@ class ciudadesController extends DooController {
     }
 
     public function add(){
-    
         Doo::loadModel("Municipios");
         $municipios = new municipios();
         $this->data['rootUrl'] = Doo::conf()->APP_URL;
@@ -60,13 +59,31 @@ class ciudadesController extends DooController {
     public function validateId(){
         $id = $_POST["id"];
         $val = $_POST["val"];
-        
         $exist=Doo::db()->query("SELECT id FROM municipios where municipio='$val' and id != '$id';")->fetch();
         if($exist){
             echo 'TRUE';
         }else{
             echo 'FALSE';
         }
+    }
+
+    public function edit(){
+        Doo::loadModel("Municipios");
+        $municipios = new Municipios();
+        $id=$this->params["pindex"];
+        $this->data['rootUrl'] = Doo::conf()->APP_URL;
+        $this->data['cargos'] = Doo::db()->find("Cargos",array("deleted"=>" 1")); 
+        $this->data['municipios'] = Doo::db()->find("municipios",
+        array('where' => 'id = ?','limit' => 1,
+               'param' => array($id)));
+        $this->data['content'] = 'ciudades/form.php';
+        $this->renderc('index', $this->data, true);
+    }
+
+    public function deactivate(){
+        $id = $this->params["pindex"];
+        Doo::db()->query("UPDATE municipios SET estado=0 WHERE id=?", array($id));
+        return Doo::conf()->APP_URL . "ciudades";
     }
 
 }
