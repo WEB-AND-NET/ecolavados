@@ -11,6 +11,8 @@
       href="<?= $data["rootUrl"] ?>global/css/request/authorize.css"
     />
     <link rel="stylesheet" href="<?= $data["rootUrl"] ?>global/admin/font-awesome/css/font-awesome.min.css"/>
+    <!-- jQuery 2.1.4 -->
+    <script type='text/javascript'src="<?= $data["rootUrl"] ?>global/admin/js/jquery-2.1.4.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -26,8 +28,8 @@
         <div class="col-md-11"><?= $data["request"]["fecha"] ?></div>
         <div class="col-md-1">Type</div>
         <div class="col-md-11"><?= $data["request"]["type"] ?></div>
-        <div class="col-md-6"></div>
-        <div class="col-md-6"></div>
+        <div class="col-md-1">Token:</div>
+        <div class="col-md-5"><input id="token" maxlength="6" type="text" class="form-control"></div>
         <div class="col-md-6"></div>
         <div class="col-md-6"></div>
         <div class="col-md-6"></div>
@@ -79,7 +81,7 @@
                             <td></td>
                             <td><?= $totalMaterial ?></td>
                             <td rowspan='4'>
-                                <button class='btn btn-success btn-block'>Authorize</button><br>
+                                <button id='btn-approve' class='btn btn-success btn-block'>Authorize</button><br>
                                 <button class='btn btn-warning btn-block'>Change Request</button><br>
                                 <button class='btn btn-danger btn-block'>Decline</button> 
                             </td>
@@ -110,5 +112,28 @@
         </div>
       </section>
     </div>
+    <input type="hidden" id="id" value="<?php echo $data["id"]  ?>">
   </body>
 </html>
+<script>
+  $("#btn-approve").click(function(){
+    sendResponse("A");
+  })
+  function sendResponse(state){
+    const token = $("#token").val()
+    if(token != ""){
+      $.post("<?php echo $data["rootUrl"]  ?>request/updateRequestStatus",{
+        id:$("#id").val(),
+        status:state,
+        token
+      },function(data){
+          if(data){
+            alert(data.message)
+          }
+      },"json");
+    }else{
+      alert("Please insert a token that you receive via email.")
+    }
+    
+  }
+</script>

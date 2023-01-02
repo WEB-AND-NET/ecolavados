@@ -58,6 +58,63 @@ class RequestController extends DooController {
         echo json_encode($request);
     }
 
+    public function edit(){
+        $id= $this->params["pindex"];
+        Doo::loadModel("Request");
+        Doo::loadController("ItemsMrController");
+        $itemsMrController = new ItemsMrController();
+
+        if (isset($_SESSION["DetailsRequest"])) {
+            $_SESSION["DetailsRequest"]=null;
+        } 
+        if (isset($_SESSION["eliminar"])) {
+            $_SESSION["eliminar"]=null;
+        }
+      
+        if (isset($_SESSION["DetailsRequest"])) {
+            $datos = unserialize($_SESSION["DetailsRequest"]);
+        } else {
+            $datos = array();
+        }
+        $items = array();
+        $current_request = Doo::db()->find("Request",array("where"=>"id = ?","limit"=>1,"param"=>array($id)));
+        $request_items = Doo::db()->query("select * from request_items where id_request='$id'")->fetchAll();
+        foreach ($request_items as $key => $request) {
+            $area_name = Doo::db()->query("SELECT descripcion FROM items 
+                        WHERE principal = 'N' AND depende='N' AND editable = 'N' AND is_item_area = 'N' AND is_area = 'S' AND deleted='1' and id='$request[id_area]' 
+                        order by item_order;")->fetch();
+
+            $area_item_name =  Doo::db()->query("SELECT * FROM items WHERE principal = 'N' AND depende='N' AND editable = 'N' AND is_item_area = 'S' 
+            AND is_area = 'N' AND deleted='1' AND id = '$request[id_item_area]'order by item_order;")->fetch(); 
+
+            $services_name = Doo::db()->query("SELECT id,mr from mr_items where id= '$request[id_service]' and deleted='1'")->fetch();
+
+            $damage_code = Doo::db()->find("MrGuideline",array("where"=>"damage = ? and deleted=1","limit"=>1,"param"=>array($request["id_damage"])));
+            $items[] = array(      
+                "id_request"=>$request["id"],       
+                "hours"=>$request["hours"],
+                "material"=>$request["material"],
+                "remarks"=>$request["remarks"],
+                "total" => (($request["hours"] * $current_request->labour_rate) + $request["material"]),
+                "area_name"=>$area_name["descripcion"],
+                "area_item_name"=>$area_item_name["descripcion"],
+                "services_code"=>$services_name["mr"],
+                "damage_code"=>$damage_code->code,
+            );
+        }
+        $datos = $items;   
+        $_SESSION["DetailsRequest"] = serialize($datos);
+        $this->data["request"] = $current_request;
+        $this->data['rootUrl'] = Doo::conf()->APP_URL;       
+        $this->data['damages'] = $itemsMrController->getGuideLineDamage();
+        $this->data["clientes"] = Doo::db()->query("select nombre,id from clientes where deleted='1';")->fetchAll();
+        $this->data["areas"] = Doo::db()->query("SELECT * FROM items WHERE principal = 'N'AND depende='N' 
+        AND editable = 'N' AND is_item_area = 'N' AND is_area = 'S' AND deleted='1' order by item_order;")->fetchAll();
+        $this->data['content'] = 'request/form.php';
+        $this->renderc('index', $this->data, true);
+    }
+
+
     public function indexRequest(){
         $login = $_SESSION['login'];
         $this->data['rootUrl'] = Doo::conf()->APP_URL;
@@ -138,6 +195,28 @@ class RequestController extends DooController {
         }
         Doo::db()->query("UPDATE request SET state='A' WHERE id='$id'");
         return Doo::conf()->APP_URL . "$url";
+    }
+
+    public function updateRequestStatus(){
+        Doo::loadController("TokensController");
+        $token = new TokensController();
+        $user_token = $_POST["token"];
+        $exist = $token->exist($user_token);
+        $id = $_POST["id"];
+        $status = $_POST["status"];
+        $message = "";
+        if($exist){
+            if($status == "A" || $status == "P" || $status == "C" || $status == "N"){
+                Doo::db()->query("UPDATE request SET state='$status' WHERE id='$id'");
+                $token->desactivate($user_token);
+                if($status == "A"){
+                    $message = "Requeust approved";
+                }
+            }
+        }else{
+            $message = "invalid token";
+        }       
+        echo json_encode(array("message"=>$message));
     }
 
     public function packDetails($packId){
@@ -283,96 +362,6 @@ class RequestController extends DooController {
         INNER JOIN request r ON (r.id=rie.id_request) AND  rie.id_request='$id' group by rie.id ;")->fetchAll();
     }
 
-    public function edit(){
-        $id= $this->params["pindex"];
-        Doo::loadModel("Request");
-        if (isset($_SESSION["DetailsRequest"])) {
-            $_SESSION["DetailsRequest"]=null;
-        } 
-        if (isset($_SESSION["eliminar"])) {
-            $_SESSION["eliminar"]=null;
-        }
-      
-        if (isset($_SESSION["DetailsRequest"])) {
-            $datos = unserialize($_SESSION["DetailsRequest"]);
-        } else {
-            $datos = array();
-        }
-      
-        $this->data["request"] = Doo::db()->find("Request",array("where"=>"id = ?","limit"=>1,"param"=>array($id)));
-        $this->data['rootUrl'] = Doo::conf()->APP_URL;
-        $productos = $this->productos($id);
-        foreach($productos as $producto){
-            $object = Doo::db()->query("SELECT cp.id, concat('Services: ',pr.nombre ,', Purpose of contract: ',p.nombre)as nombre ,concat('Services: ',pr.nombre ,', Purpose of contract: ',p.nombre)as detail ,p.precio_compra,cp.precio  
-            FROM clientes_productos cp
-            INNER JOIN  productos p on(p.id=cp.productos_id)
-            INNER JOIN procesos pr on (pr.id=cp.servicio_id) where cp.id='$producto[id_item_repair]';")->fetch();
-            if($producto["id_item_entrada"]==0){
-                 $array = array(
-                    "request_id"=>$producto["id"],
-                    "id_damage"=>0,
-                    "sesion"=>"General",
-                    "part"=>"General",
-                    "calification"=>"General",
-                    "id_item_repair"=>$object["id"],
-                    "name_item_repair"=>$object["nombre"],
-                    "precio_item_repair"=>$object["precio"],
-                    "detail_item_repair"=>$object["detail"],
-                    "type_item_repair"=>$producto["type"],
-                    "cantidad"=>$producto["cantidad"]
-                );
-            }else{
-                $damageDetail = Doo::db()->query("SELECT ie.id,it.descripcion as sesion,i.descripcion,ie.valor FROM items_entrada ie
-                INNER JOIN items i on (i.id=ie.items_id)
-                LEFT JOIN  items it ON (it.id = i.depende)
-                where ie.id='$producto[id_item_entrada]';")->fetch();
-                $array = array(
-                    "request_id"=>$producto["id"],
-                    "id_damage"=>$damageDetail["id"],
-                    "sesion"=>$damageDetail["sesion"],
-                    "part"=>$damageDetail["descripcion"],
-                    "calification"=>$damageDetail["valor"],
-                    "id_item_repair"=>$object["id"],
-                    "name_item_repair"=>$object["nombre"],
-                    "precio_item_repair"=>$object["precio"],
-                    "detail_item_repair"=>$object["detail"],
-                    "type_item_repair"=>$producto["type"],
-                    "cantidad"=>$producto["cantidad"]
-                );
-            }
-           
-            $datos[] = $array;
-        }
-        $paquetes = $this->paquetes($id);
-        foreach($paquetes as $paquete){
-            $object= Doo::db()->query("SELECT p.id,p.nombre,p.precio,group_concat(pro.nombre) as detail FROM paquetes p 
-            INNER JOIN detalle_paquetes dp ON(p.id=dp.paquetes_id) 
-            INNER JOIN productos  pro ON (pro.id=dp.productos_id)
-            WHERE p.id='$paquete[id_item_repair]' AND dp.delete='1'  GROUP BY p.id")->fetch();
-            if($paquete["id_item_entrada"]==0){
-                $array = array(
-                    "request_id"=>$paquete["id"],
-                    "id_damage"=>0,
-                    "sesion"=>"General",
-                    "part"=>$object["nombre"],
-                    "calification"=>"General",
-                    "id_item_repair"=>$object["id"],
-                    "name_item_repair"=>$object["nombre"],
-                    "precio_item_repair"=>$object["precio"],
-                    "detail_item_repair"=>$object["detail"],
-                    "type_item_repair"=>$paquete["type"],
-                    "cantidad"=>$paquete["cantidad"]
-                );
-            }else{
-
-            }    
-            $datos[] = $array;
-        }
-        $_SESSION["DetailsRequest"] = serialize($datos);
-        $this->data["clientes"] = Doo::db()->query("select nombre,id from clientes where deleted='1';")->fetchAll();
-        $this->data['content'] = 'request/form.php';
-        $this->renderc('index', $this->data, true);
-    }
 
     public function deleteItem(){
         $index = $_POST["index"];
@@ -417,6 +406,7 @@ class RequestController extends DooController {
                 "damage_code"=>$damage_code->code,
             );
         }
+        $this->data['id'] = $id;
         $this->data['items'] = $items;
         $this->data['request'] = $current_request;
         $this->data['rootUrl'] = Doo::conf()->APP_URL;
@@ -486,6 +476,7 @@ class RequestController extends DooController {
             }
         }else{
             $datos[] = $array;
+            //[]{}\|||
         }
         $_SESSION["DetailsRequest"] = serialize($datos);
         echo json_encode($datos);
@@ -583,7 +574,10 @@ class RequestController extends DooController {
     public function sendEmailRequest($email,$body){
         Doo::loadClass("mail/PHPMailer");
         Doo::loadModel("Parametros");
+        Doo::loadController("TokensController");
+        $token = new TokensController();
         $param = new Parametros();
+        $token_generate = $token->generate("request");
         $param=Doo::db()->Find($param,array('limit'=>1));
         
         $mail = new PHPMailer();
@@ -604,7 +598,7 @@ class RequestController extends DooController {
         foreach($emails as $emal){
             $mail->AddAddress($emal);
         }
-         $mail->AddAddress("mmf19972010@hotmail.com");
+        $mail->AddAddress("mmf19972010@hotmail.com");
 
         $mail->Subject = $email->email_subject =="" ?  "Information of request" :  $email->email_subject;
         $template =  <<<EOT
@@ -620,6 +614,9 @@ class RequestController extends DooController {
                 <center>
                     <div style='width:600px; height:400px; background:#e1efd8; border:solid 1px #000'>
                      <p style='font-family:arial; font-size:20px; margin-top:20px'>REQUEST DETAILS</p>
+                     <p style='font-family:arial; font-size:16px; margin-top:20px'>
+                        Use this token: $token_generate for authorize or reject this request
+                     </p> 
                    <p>$email->email_body</p>
                 </div>
                 <center>

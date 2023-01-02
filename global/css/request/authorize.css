@@ -6,12 +6,16 @@
   border-radius: 2px;
 }
 
-.content-header div {
+.content-header div:not(table) {
   font-size: 18px;
+  font-weight: bold;
 }
 .content-header div.client {
   text-align: center;
   font-size: 25px;
+}
+table{
+  margin-top: 20px;
 }
 th {
   background: #eee;

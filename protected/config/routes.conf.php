@@ -306,6 +306,8 @@ $route['*']['/mrequest/approve/:url/:id'] = array('RequestController', 'approve'
 $route['*']['/request/delete'] = array('RequestController', 'deleteItem');
 $route['*']['/request/getItemsArea'] = array('RequestController', 'getItemsArea');
 $route['*']['/request/authorize/:id'] = array('RequestController', 'authorize');
+$route['*']['/request/updateRequestStatus'] = array('RequestController', 'updateRequestStatus');
+
 
 /**Request Client*/
 
