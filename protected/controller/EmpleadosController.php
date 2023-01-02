@@ -10,7 +10,18 @@
 class EmpleadosController extends DooController {
 
     public function beforeRun($resource, $action) {
-        
+        if (!isset($_SESSION['login'])) {
+            return Doo::conf()->APP_URL;
+        }
+
+        if (!isset($_SESSION['permisos'])) {
+            return Doo::conf()->APP_URL;
+        } else {
+            if ($_SESSION["permisos"]["503"] != 1) {
+                $_SESSION["msg_error"] = "No tiene Permiso para esta Opci&oacute;n";
+                return Doo::conf()->APP_URL;
+            }
+        }
     }
 
     public function index(){
@@ -64,7 +75,7 @@ class EmpleadosController extends DooController {
     public function validateId(){
         $id = $_POST["id"];
         $val = $_POST["val"];
-        $exist=Doo::db()->query("SELECT id FROM empleados where identificacion='' and id != '';")->fetch();
+        $exist=Doo::db()->query("SELECT id FROM empleados where identificacion='$val' and id != '$id';")->fetch();
         if($exist){
             echo 'TRUE';
         }else{
