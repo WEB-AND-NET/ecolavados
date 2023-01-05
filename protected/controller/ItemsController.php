@@ -38,6 +38,7 @@ class ItemsController extends DooController {
         $this->data['items'] = new Items();
         $sql = "SELECT id,descripcion,principal,depende from items i where i.deleted='1' and principal='S' ";
         $this->data["principales"] = Doo::db()->query($sql)->fetchAll();
+        $this->data["areas"] = Doo::db()->query("SELECT * FROM items WHERE principal = 'N' AND depende = 'N' AND editable = 'N' AND is_item_area='N' and is_area='S' AND deleted='1';")->fetchAll();
         $this->data['content'] = 'items/form.php';
         $this->renderc('index', $this->data, true);
     }
@@ -50,6 +51,7 @@ class ItemsController extends DooController {
         $this->data['items'] =Doo::db()->find("Items",array("where"=>"id = ? and deleted=1","limit"=>1,"param"=>array($id)));
         $sql = "SELECT id,descripcion,principal,depende from items i where i.deleted='1' and principal='S' ";
         $this->data["principales"] = Doo::db()->query($sql)->fetchAll();
+        $this->data["areas"] = Doo::db()->query("SELECT * FROM items WHERE principal = 'N' AND depende = 'N' AND editable = 'N' AND is_item_area='N' and is_area='S' AND deleted='1';")->fetchAll();
         $this->data['content'] = 'items/form.php';
         $this->renderc('index', $this->data, true);
     }
@@ -59,13 +61,11 @@ class ItemsController extends DooController {
         Doo::loadModel("Items");
         $Items = new Items($_POST);
         $fecha = new DateTime();
+        if($Items->principal=='S' || $Items->is_item_area=='S'){
+            $Items->depende='N';
+        }
         if($Items->id==""){
             $Items->id=NULL;
-            if($Items->principal=='S'){
-                $Items->depende=0;
-            }else{
-                
-            }
             $Items->created_at =$fecha->format('Y-m-d H:i:s');
             $Items->updated_at = $fecha->format('Y-m-d H:i:s');
             $Items->id=Doo::db()->insert($Items);
@@ -80,10 +80,7 @@ class ItemsController extends DooController {
                         Doo::db()->insert($ItemsCalificaciones);
                     }
                 }
-            }
-            
-           
-            
+            }           
         }else{
             Doo::db()->query("UPDATE items_calificaciones SET deleted='0' where id_item='$Items->id' ");
             $Items->update_at = $fecha->format('Y-m-d H:i:s');
@@ -157,7 +154,31 @@ class ItemsController extends DooController {
         return Doo::conf()->APP_URL . 'items'; 
     }
 
-
+    public function getAreasAndItems(){
+        $list = array();
+        $areas = Doo::db()->query("SELECT * FROM items 
+        WHERE principal = 'N'
+        AND depende='N' 
+        AND editable = 'N' 
+        AND is_item_area = 'N' 
+        AND is_area = 'S' 
+        AND deleted='1' order by item_order;")->fetchAll();
+        foreach($areas as $key => $area){
+            $items = Doo::db()->query("SELECT * FROM items 
+            WHERE principal = 'N'
+            AND depende='N' 
+            AND editable = 'N' 
+            AND is_item_area = 'S' 
+            AND is_area = 'N' 
+            AND deleted='1' 
+            AND area_to_belong = '$area[id]'order by item_order;")->fetchAll();       
+            
+                $area["items"] = $items;
+                $list[]=$area;
+            
+        }
+        return $list;
+    }
 }
 
 ?>

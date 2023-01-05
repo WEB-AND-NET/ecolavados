@@ -59,12 +59,12 @@ class AutorizacionIngresoBase extends DooModel{
     public $empresa_salida;
 
     /**
-     * @var varchar Max length is 1.
+     * @var longtext
      */
     public $autorizacion30;
 
     /**
-     * @var varchar Max length is 1.
+     * @var longtext
      */
     public $autorizacion60;
 
@@ -158,9 +158,14 @@ class AutorizacionIngresoBase extends DooModel{
      */
     public $reference_get_out;
 
+    /**
+     * @var datetime
+     */
+    public $final_arrival;
+
     public $_table = 'autorizacion_ingreso';
     public $_primarykey = 'id';
-    public $_fields = array('id','transportista','placa','conductor','state','tanques_id','fecha_estimada','fecha_salida','placa_salida','nombre_conductor_salida','empresa_salida','autorizacion30','autorizacion60','clientes_id','reference','singeco','singdrive','deleted','create_at','update_at','color_client_send','numer_client_sed','name_client_send','type','reservation','reference_out','assing','observation','arrival','last_cargo_suggest','reference_get_out');
+    public $_fields = array('id','transportista','placa','conductor','state','tanques_id','fecha_estimada','fecha_salida','placa_salida','nombre_conductor_salida','empresa_salida','autorizacion30','autorizacion60','clientes_id','reference','singeco','singdrive','deleted','create_at','update_at','color_client_send','numer_client_sed','name_client_send','type','reservation','reference_out','assing','observation','arrival','last_cargo_suggest','reference_get_out','final_arrival');
 
     public function getVRules() {
         return array(
@@ -222,12 +227,10 @@ class AutorizacionIngresoBase extends DooModel{
                 ),
 
                 'autorizacion30' => array(
-                        array( 'maxlength', 1 ),
                         array( 'optional' ),
                 ),
 
                 'autorizacion60' => array(
-                        array( 'maxlength', 1 ),
                         array( 'optional' ),
                 ),
 
@@ -317,6 +320,11 @@ class AutorizacionIngresoBase extends DooModel{
                 'reference_get_out' => array(
                         array( 'maxlength', 100 ),
                         array( 'optional' ),
+                ),
+
+                'final_arrival' => array(
+                        array( 'datetime' ),
+                        array( 'notnull' ),
                 )
             );
     }

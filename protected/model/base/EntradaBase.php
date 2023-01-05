@@ -53,9 +53,10 @@ class EntradaBase extends DooModel{
      */
     public $posicion;
 
-
+    /**
+     * @var int Max length is 11.
+     */
     public $ciudad;
-    
 
     public $_table = 'entrada';
     public $_primarykey = 'id';
@@ -113,6 +114,12 @@ class EntradaBase extends DooModel{
                 ),
 
                 'posicion' => array(
+                        array( 'integer' ),
+                        array( 'maxlength', 11 ),
+                        array( 'optional' ),
+                ),
+
+                'ciudad' => array(
                         array( 'integer' ),
                         array( 'maxlength', 11 ),
                         array( 'optional' ),

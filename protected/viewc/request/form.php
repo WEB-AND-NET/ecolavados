@@ -98,6 +98,16 @@
                         <input  class='form-control' id='img' name='img' type='file'>
                     </div><!-- /.input group -->
                 </div>
+                <div class="col-lg-4">
+                    <label id="l_labour_rate">Labour Rate*</label>
+                    <div class="input-group margin-bottom-20">
+                        <span   class="input-group-addon">
+                            <i  class="fa fa-money"></i>
+                        </span>
+                        <input  class='form-control' id='labour_rate' name='labour_rate' type='number'>
+                    </div><!-- /.input group -->
+                </div>
+
 
 
 
@@ -107,52 +117,87 @@
             <fieldset>
                 <legend>Request details</legend>
                 <div class="col-lg-4">
-                    <label id="l_clientes_id">Damages*</label>
-                    <div class="input-group margin-bottom-20">
-                        <span   class="input-group-addon">
-                            <i  class="fa   fa-tasks"></i>
+                    <label id="l_id_area">Areas*</label>
+                    <div class="input-group margin-bottom-20" >
+                        <span class="input-group-addon">
+                            <i  class="fa fa-code-fork "></i>
                         </span>
-                        <select class='form-control'  name="items_entrada" id="items_entrada">
-                           
+                        <select class='form-control' name="id_area" id="id_area">
+                        <option value="X">Please select a option</option>                        
+                        <?php foreach($data["areas"] as $area){ ?>                            
+                            <option value="<?= $area["id"] ?>"><?= $area["descripcion"] ?></option>
+                        <?php } ?>
                         </select>
                     </div><!-- /.input group -->
                 </div>
 
 
                 <div class="col-lg-4">
-                    <label id="l_clientes_id">Purpose of contract</label>
-                    <div class="input-group margin-bottom-20">
-                        <span   class="input-group-addon">
-                            <i  class="fa   fa-tasks"></i>
+                    <label id="l_id_items_area">Item Area*</label>
+                    <div class="input-group margin-bottom-20" >
+                        <span class="input-group-addon">
+                            <i  class="fa fa-cube"></i>
                         </span>
-                        <select class='form-control'  name="clientes_productos" id="clientes_productos">
-                            
+                        <select class='form-control' name="id_items_area" id="id_items_area">
                         </select>
                     </div><!-- /.input group -->
                 </div>
-                <!--  -->
                 <div class="col-lg-4">
-                    <label id="l_clientes_id">Packs</label>
-                    <div class="input-group margin-bottom-20">
-                        <span   class="input-group-addon">
-                            <i  class="fa   fa-tasks"></i>
+                    <label id="l_id_damage">Damage*</label>
+                    <div class="input-group margin-bottom-20" >
+                        <span class="input-group-addon">
+                            <i  class="fa fa-cubes"></i>
                         </span>
-                        <select class='form-control'  name="paquetes" id="paquetes">
-                            
+                        <select class='form-control' name="id_damage" id="id_damage">
+                            <option value="X">Please select a option</option>                        
+                            <?php foreach($data["damages"] as $damage){ ?>                            
+                                <option value="<?= $damage["id_damage"] ?>"><?= $damage["damage"] ?></option>
+                            <?php } ?>
                         </select>
                     </div><!-- /.input group -->
                 </div>
 
- <div class="col-lg-4">
-                    <label id="l_clientes_id">Quantity</label>
-                    <div class="input-group margin-bottom-20">
-                        <span   class="input-group-addon">
-                            <i  class="fa   fa-tasks"></i>
+
+                <div class="col-lg-4">
+                    <label id="l_id_services">M&R*</label>
+                    <div class="input-group margin-bottom-20" >
+                        <span class="input-group-addon">
+                            <i  class="fa fa-cube"></i>
                         </span>
-                        <input class='form-control' value='1'  name="cantidad" id="cantidad"/>
+                        <select class='form-control' name="id_services" id="id_services">
+                        </select>
                     </div><!-- /.input group -->
                 </div>
-                
+
+                <div class="col-lg-4">
+                    <label id="l_hours">Hours*</label>
+                    <div class="input-group margin-bottom-20">
+                        <span   class="input-group-addon">
+                            <i  class="fa fa-clock-o"></i>
+                        </span>
+                        <input  class='form-control' id='hours' name='hours' type='number'>
+                    </div><!-- /.input group -->
+                </div>
+
+                <div class="col-lg-4">
+                    <label id="l_hours">Material*</label>
+                    <div class="input-group margin-bottom-20">
+                        <span   class="input-group-addon">
+                            <i  class="fa fa-money"></i>
+                        </span>
+                        <input  class='form-control' id='material' name='material' type='number'>
+                    </div><!-- /.input group -->
+                </div>
+
+                <div class="col-lg-12">
+                    <label id="l_email_subject">Remarks</label>
+                    <div class="input-group margin-bottom-20">
+                        <span   class="input-group-addon">
+                            <i  class="fa fa-envelope"></i>
+                        </span>
+                        <textarea class='form-control' id='remarks' name='remarks'></textarea>
+                    </div><!-- /.input group -->
+                </div>
                 
                 <div class="clearfix"></div><br>
             <button type="button" id="btn-add" class="btn  bg-green pull-right"><i class="fa fa-plus "></i> Add</button>
@@ -160,13 +205,14 @@
                 <table id='databables' class="table table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Sesion</th>
-                            <th>Description</th>
-                            <th>Calification</th>
-                            <th>Products</th>
-                            <th>Details</th>
-                              <th>quantity</th>
-                            <th>Price</th>
+                            <th>Area</th>
+                            <th>Item Area</th>
+                            <th>Damage Code</th>
+                            <th>REP Code</th>
+                            <th>Remarks</th>
+                            <th>Hours</th>
+                            <th>Material</th>
+                            <th>Total</th>
                             <th>Img</th>
                             <th></th>
                             
@@ -209,13 +255,14 @@ var table = $('#databables').DataTable({
             dataSrc:'data'
         },
         columns:[ 
-            { data: "sesion"} ,
-            { data: "part"} ,
-            { data: "calification" },
-            { data: "name_item_repair" },
-            { data: "detail_item_repair" },
-              { data: "cantidad" },
-            { data: "precio_item_repair" },
+            { data: "area_name"} ,
+            { data: "area_item_name"} ,
+            { data: "damage_code" },
+            { data: "services_code" },
+            { data: "remarks" },           
+            { data: "hours" },
+            { data: "material" },
+            { data: "total" },
             {
                 "data": null,
                 "defaultContent": "<input type='file' class='img' value='' type='button' name='img'>"
@@ -227,8 +274,58 @@ var table = $('#databables').DataTable({
         ]
     } );
 
-      $("#btn-add").click(function(){
-        if($("#paquetes").val()=="R" && $("#clientes_productos").val()=="R"){
+     $("#btn-add").click(function(){
+        const labour_rate = $("#labour_rate").val();
+        const id_area = $("#id_area").val();
+        const id_items_area = $("#id_items_area").val();
+        const id_damage = $("#id_damage").val();
+        const id_services = $("#id_services").val();
+        const hours = $("#hours").val();
+        const material = $("#material").val();
+        const remark = $("#remarks").val();
+        if(labour_rate=="" || labour_rate == 0){
+            alert("Please add labour rate or labour rate should be major to zero.")
+            return;
+        }        
+        if(id_area == "X"){
+            alert("Please select a area");
+            return;
+        }
+        if(id_items_area == "X"){
+            alert("Please select a item area");
+            return;
+        }
+        if(id_damage == "X"){
+            alert("Please select a damage");
+            return;
+        }
+        if(id_services == "X"){
+            alert("Please select a services");
+            return;
+        }
+        if(hours < 0 || hours == ""){
+            alert("Hours not should be minor to zero or empty");
+            return;
+        }
+        if(material < 0 || material == ""){
+            alert("Material not should be minor to zero or empty");
+            return;
+        }
+        $("#labour_rate").prop( "readonly", true );
+        $.post("<?= $patch; ?>request/insert",{
+            labour_rate,
+            id_area, 
+            id_items_area, 
+            id_damage, 
+            id_services,
+            hours, 
+            material, 
+            remark
+        },function(data){
+            console.log(data);
+        });
+        table.ajax.reload();
+      /*   if($("#paquetes").val()=="R" && $("#clientes_productos").val()=="R"){
 
         }else{
             if(!$("#paquetes").attr("disabled")){
@@ -240,11 +337,11 @@ var table = $('#databables').DataTable({
                     console.log(data);
                 });
             }
-            table.ajax.reload();
+            
             $("#cantidad").val(1)
         }
         
-        
+       */ 
     })
 
     $('#databables tbody').on( 'click', 'input.img', function () {
@@ -364,6 +461,26 @@ var table = $('#databables').DataTable({
         },'Json');
     })
 
+
+    $("#id_area").change(function(data){
+        $.post("<?= $patch; ?>/request/getItemsArea",{id_area:$(this).val()},function(data){
+            var html = `<option value='X'>Select a option</option>`;
+            data.forEach(function(items){
+                html += `<option value='${items.id}'>${items.descripcion}</option>`
+            })
+            $("#id_items_area").html(html);
+        },'Json');
+    })
+
+    $("#id_damage").change(function(data){
+        $.post("<?= $patch; ?>items/mr/getGuidelineItems",{id:$(this).val()},function(data){
+            var html = `<option value='X'>Select a option</option>`;
+            data.forEach(function(items){
+                html += `<option value='${items.id}'>${items.mr}</option>`
+            })
+            $("#id_services").html(html);
+        },'Json');
+    })
     
 
     function validateForm() {

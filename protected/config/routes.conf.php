@@ -304,6 +304,11 @@ $route['*']['/request/insert'] = array('RequestController', 'insert');
 $route['*']['/request/not/:url/:id'] = array('RequestController', 'not');
 $route['*']['/mrequest/approve/:url/:id'] = array('RequestController', 'approve');
 $route['*']['/request/delete'] = array('RequestController', 'deleteItem');
+$route['*']['/request/getItemsArea'] = array('RequestController', 'getItemsArea');
+$route['*']['/request/authorize/:id'] = array('RequestController', 'authorize');
+$route['*']['/request/updateRequestStatus'] = array('RequestController', 'updateRequestStatus');
+
+
 /**Request Client*/
 
 $route['*']['/mrequest/approve/:id'] = array('RequestController', 'approve');
@@ -331,6 +336,28 @@ $route['*']['/items/getItems'] = array('ItemsController', 'getItems');
 $route['*']['/items/saveTipo'] = array('ItemsController', 'saveTipo');
 $route['*']['/items/getItemsCalificaciones'] = array('ItemsController', 'getItemsCalificaciones');
 
+/***
+ * 
+ * M&R 
+ * */
+$route['*']['/items/mr'] = array('ItemsMrController', 'index');
+$route['*']['/items/mr/add'] = array('ItemsMrController', 'add');
+$route['*']['/items/mr/edit/:id'] = array('ItemsMrController', 'edit');
+$route['*']['/items/mr/save'] = array('ItemsMrController', 'save');
+$route['*']['/items/mr/validateCode'] = array('ItemsMrController', 'getCode');
+$route['*']['/items/mr/getGuidelineItems'] = array('ItemsMrController', 'getGuidelineItems');
+
+
+/**Damages**/
+$route['*']['/items/mr/damages'] = array('ItemsMrController', 'damageIndex');
+$route['*']['/items/mr/getDamages'] = array('ItemsMrController', 'getDamages');
+$route['*']['/items/mr/saveDamages'] = array('ItemsMrController', 'saveDamages');
+$route['*']['/items/mr/deleteDamages'] = array('ItemsMrController', 'deleteDamages');
+/**Services**/
+$route['*']['/items/mr/services'] = array('ItemsMrController', 'servicesIndex');
+$route['*']['/items/mr/getServices'] = array('ItemsMrController', 'getServices');
+$route['*']['/items/mr/saveServices'] = array('ItemsMrController', 'saveServices');
+$route['*']['/items/mr/getService'] = array('ItemsMrController', 'getService');
 
 
 

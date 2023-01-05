@@ -1,7 +1,7 @@
 <?php
 Doo::loadCore('db/DooModel');
 
-class HotBase extends DooModel{
+class RequestItemsBase extends DooModel{
 
     /**
      * @var int Max length is 11.
@@ -9,125 +9,119 @@ class HotBase extends DooModel{
     public $id;
 
     /**
-     * @var varchar Max length is 45.
+     * @var int Max length is 11.
      */
-    public $consecutivo;
+    public $id_request;
 
     /**
      * @var int Max length is 11.
      */
-    public $id_trabajo;
+    public $id_damage;
 
     /**
      * @var int Max length is 11.
      */
-    public $id_empleado_autoriza;
+    public $id_service;
 
     /**
      * @var int Max length is 11.
      */
-    public $id_empleado_autorizado;
+    public $id_area;
 
     /**
-     * @var longtext
+     * @var int Max length is 11.
      */
-    public $firma_empleado_autoriza;
+    public $id_item_area;
 
     /**
-     * @var longtext
+     * @var decimal Max length is 11. ,2).
      */
-    public $firma_empleado_autorizado;
+    public $material;
 
     /**
-     * @var datetime
+     * @var decimal Max length is 11. ,2).
      */
-    public $hora_inicio;
+    public $hours;
 
     /**
-     * @var datetime
+     * @var decimal Max length is 11. ,2).
      */
-    public $hora_final;
+    public $total;
 
     /**
      * @var char Max length is 1.
      */
-    public $status;
+    public $aproved;
 
     /**
-     * @var char Max length is 1.
+     * @var varchar Max length is 200.
      */
-    public $deleted;
+    public $remarks;
 
-    /**
-     * @var datetime
-     */
-    public $created_at;
-
-    public $_table = 'hot';
+    public $_table = 'request_items';
     public $_primarykey = 'id';
-    public $_fields = array('id','consecutivo','id_trabajo','id_empleado_autoriza','id_empleado_autorizado','firma_empleado_autoriza','firma_empleado_autorizado','hora_inicio','hora_final','status','deleted','created_at');
+    public $_fields = array('id','id_request','id_damage','id_service','id_area','id_item_area','material','hours','total','aproved','remarks');
 
     public function getVRules() {
         return array(
                 'id' => array(
                         array( 'integer' ),
                         array( 'maxlength', 11 ),
-                        array( 'optional' ),
+                        array( 'notnull' ),
                 ),
 
-                'consecutivo' => array(
-                        array( 'maxlength', 45 ),
-                        array( 'optional' ),
-                ),
-
-                'id_trabajo' => array(
+                'id_request' => array(
                         array( 'integer' ),
                         array( 'maxlength', 11 ),
                         array( 'optional' ),
                 ),
 
-                'id_empleado_autoriza' => array(
+                'id_damage' => array(
                         array( 'integer' ),
                         array( 'maxlength', 11 ),
                         array( 'optional' ),
                 ),
 
-                'id_empleado_autorizado' => array(
+                'id_service' => array(
                         array( 'integer' ),
                         array( 'maxlength', 11 ),
                         array( 'optional' ),
                 ),
 
-                'firma_empleado_autoriza' => array(
+                'id_area' => array(
+                        array( 'integer' ),
+                        array( 'maxlength', 11 ),
                         array( 'optional' ),
                 ),
 
-                'firma_empleado_autorizado' => array(
+                'id_item_area' => array(
+                        array( 'integer' ),
+                        array( 'maxlength', 11 ),
                         array( 'optional' ),
                 ),
 
-                'hora_inicio' => array(
-                        array( 'datetime' ),
+                'material' => array(
+                        array( 'float' ),
                         array( 'optional' ),
                 ),
 
-                'hora_final' => array(
-                        array( 'datetime' ),
+                'hours' => array(
+                        array( 'float' ),
                         array( 'optional' ),
                 ),
 
-                'status' => array(
+                'total' => array(
+                        array( 'float' ),
+                        array( 'optional' ),
+                ),
+
+                'aproved' => array(
                         array( 'maxlength', 1 ),
                         array( 'optional' ),
                 ),
 
-                'deleted' => array(
-                        array( 'maxlength', 1 ),
-                        array( 'optional' ),
-                ),
-
-                'created_at' => array(
-                        array( 'datetime' ),
+                'remarks' => array(
+                        array( 'maxlength', 200 ),
                         array( 'optional' ),
                 )
             );

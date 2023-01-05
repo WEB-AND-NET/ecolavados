@@ -1,0 +1,31 @@
+.title {
+  text-align: center;
+  color: white;
+  background: black;
+  margin: 35px 5px;
+  border-radius: 2px;
+}
+
+.content-header div:not(table) {
+  font-size: 18px;
+  font-weight: bold;
+}
+.content-header div.client {
+  text-align: center;
+  font-size: 25px;
+}
+table{
+  margin-top: 20px;
+}
+th {
+  background: #eee;
+  border-color: #bbb;
+  text-align: center;
+  font-weight: bold;
+}
+th,
+td {
+  border-width: 1px;
+  padding: 0.5em;
+  position: relative;
+}
